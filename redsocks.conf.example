@@ -62,7 +62,7 @@ redsocks {
 	port = 1080;
 
 
-	// known types: socks4, socks5, http-connect, http-relay
+	// known types: socks4, socks5, http-connect, http-relay, fully_transparent
 	type = socks5;
 
 	// login = "foobar";

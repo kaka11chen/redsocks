@@ -46,12 +46,14 @@ extern relay_subsys http_connect_subsys;
 extern relay_subsys http_relay_subsys;
 extern relay_subsys socks4_subsys;
 extern relay_subsys socks5_subsys;
+extern relay_subsys fully_transparent_subsys;
 static relay_subsys *relay_subsystems[] =
 {
 	&http_connect_subsys,
 	&http_relay_subsys,
 	&socks4_subsys,
 	&socks5_subsys,
+    &fully_transparent_subsys
 };
 
 static list_head instances = LIST_HEAD_INIT(instances);
@@ -567,7 +569,8 @@ fail:
 
 void redsocks_connect_relay(redsocks_client *client)
 {
-	client->relay = red_connect_relay(&client->instance->config.relayaddr,
+	client->relay = red_connect_relay(client->instance->relay_ss->is_fully_transparent ?
+                                      &client->destaddr : &client->instance->config.relayaddr,
 			                          redsocks_relay_connected, redsocks_event_error, client);
 	if (!client->relay) {
 		redsocks_log_errno(client, LOG_ERR, "red_connect_relay");
